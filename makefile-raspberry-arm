@@ -1,0 +1,48 @@
+SRCDIR=.
+CC=g++
+
+# Compiler setup
+CROSS_PREFIX=
+CROSS=$(CROSS_PREFIX)$(CC)
+INCLUDE=-I. -Iinclude
+# CPPFLAGS=-pedantic -Wall -Wextra -I
+LDFLAGS=-L. -Llibs/arm
+LPATH=
+CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT
+#CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT -std=c++11
+#CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT -O0 -g
+ARCH := -mcpu=cortex-a7
+
+
+LIBS=-lpthread -lmodbus -lwiringPi
+
+RM=rm -f
+
+root_include_dir:=include
+relative_source_dirs=:.
+objects=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
+
+
+# Programs
+application=chademo
+
+
+# Rules
+.PHONY: cross all clean rebuild
+
+all: $(application)
+
+$(application): $(objects)
+	$(CROSS) -o $@ $(objects) $(LDFLAGS) $(LIBS)
+
+
+%.o:%.cpp
+	$(CROSS) -o $@ -c $< $(compile_flags) $(INCLUDE) $(CPPFLAGS) $(ARCH)
+
+
+clean:
+	$(RM) $(SRCDIR)/*.o
+	$(RM) $(application)
+
+rebuild: clean
+

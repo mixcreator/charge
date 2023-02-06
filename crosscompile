@@ -1,0 +1,5 @@
+# source crosscompile
+export INSTALLDIR=/home/cross/arm
+export PATH=$INSTALLDIR/bin:$PATH
+export CC=arm-none-linux-gnueabihf-gcc
+export CXX=arm-none-linux-gnueabihf-g++

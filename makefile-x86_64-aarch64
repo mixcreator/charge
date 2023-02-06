@@ -1,0 +1,47 @@
+SRCDIR=.
+CC=g++
+
+TOOLCHAIN=aarch64-none-linux-gnu-
+TPATH=~/toolsn/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin/
+CROSS=$(TPATH)$(TOOLCHAIN)$(CC)
+
+INCLUDE=-I. -Iinclude 
+#-I/home/mix/toolsn/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf/arm-none-linux-gnueabihf/libc/usr/include
+#LDFLAGS=-L~/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/arm-bcm2708hardfp-linux-gnueabi/sysroot/lib -L. -Llibs/arm
+LDFLAGS=-L. -Llibs/arm
+#LPATH=/tools/arm-bcm2708/arm-bcm2708hardfp-linux-gnueabi/arm-bcm2708hardfp-linux-gnueabi/sysroot
+CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT -std=c++11
+#ARCH := -mcpu=cortex-a7 --sysroot=$(LPATH) 
+ARCH:=
+LIBS=-lpthread -lwiringPi -lmodbus
+
+RM=rm -f
+
+root_include_dir:=include
+relative_source_dirs=:.
+objects=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
+
+
+# Programs
+application=chademo
+
+
+# Rules
+.PHONY: cross all clean rebuild
+
+all: $(application)
+
+$(application): $(objects)
+	$(CROSS) -o $@ $(objects) $(LDFLAGS) $(LIBS)
+
+
+%.o:%.cpp
+	$(CROSS) -o $@ -c $< $(compile_flags) $(INCLUDE) $(CPPFLAGS) $(ARCH) -static
+
+
+clean:
+	$(RM) $(SRCDIR)/*.o
+	$(RM) $(application)
+
+rebuild: clean
+

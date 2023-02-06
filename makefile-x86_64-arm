@@ -1,0 +1,49 @@
+SRCDIR=.
+
+ifneq ($V,1)
+Q ?= @
+endif
+
+
+INCLUDE=-I. -Iinclude -I$(INSTALLDIR)/sysroot/usr/include
+LDFLAGS=-L. -Llibs/arm
+LPATH=$(INSTALLDIR)/sysroot
+CXXFLAGS=-W -Wall -Wextra -Wpedantic -DRWSELECT 
+#CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT -std=c++11
+#CPPFLAGS=-Wall -Wextra -Wpedantic -DRWSELECT -O0 -g -std=c++11
+ARCH := -mcpu=cortex-a7 --sysroot=$(LPATH) 
+LIBS=-lpthread -lwiringPi -lmodbus
+
+RM=rm -f
+
+root_include_dir:=include
+relative_source_dirs=:.
+objects=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
+
+
+# Programs
+application=chademo
+
+
+# Rules
+.PHONY: cross all clean rebuild
+
+all: $(application)
+
+$(application): $(objects)
+	$Q echo "[Link]"
+	$Q $(CXX) -o $@ $(objects) $(LDFLAGS) $(LIBS)
+	
+%.o:%.cpp
+	$Q echo [Compile] $<
+	$Q $(CXX) -o $@ -c $< $(INCLUDE) $(CXXFLAGS) $(ARCH) -static
+	
+
+
+clean:
+	$Q echo "[Clean]"
+	$Q $(RM) $(SRCDIR)/*.o
+	$Q $(RM) $(application)
+
+rebuild: clean all
+
