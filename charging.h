@@ -1,5 +1,5 @@
 #ifndef __CHARGING_H__
-#define __CHARGING_H__ 2020_02_05
+#define __CHARGING_H__ 20200205
 
 #ifndef __cplusplus
 #error C++ is required

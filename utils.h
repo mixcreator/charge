@@ -1,5 +1,5 @@
 #ifndef __UTILS_H__ 
-#define __UTILS_H__  2018_05_17
+#define __UTILS_H__  20180517
 
 #include <pthread.h>
 #include <syslog.h>

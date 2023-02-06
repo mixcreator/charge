@@ -1,5 +1,5 @@
 #ifndef __MESSAGES_H__
-#define __MESSAGES_H__ 2018_05_16
+#define __MESSAGES_H__ 20180516
 
 #ifndef __cplusplus
 #error C++ is required
